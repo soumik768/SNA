@@ -5,6 +5,9 @@ turtles-own
   viral-load          ;;
    ;; avg number of nodes connected to
   virus-check-timer   ;; number of ticks since this turtle's last virus-check
+  MPC                 ;; the proportion of income to spend on essential goods (MPC)
+  income              ;; Initial value of income to be 1000, 5000, 10000, 50000 for four different economic groups
+  savings             ;; Initial value of savings to be 0
 ]
 
 
@@ -32,6 +35,9 @@ to setup-nodes
     ;; ### become-susceptible
     set virus-check-timer random virus-check-frequency
     set color red
+    set income 1000
+    set MPC 0.99
+    set savings 0
   ]
 
   set-default-shape canaries "triangle"
@@ -42,6 +48,9 @@ to setup-nodes
     ;; ### become-susceptible
     set virus-check-timer random virus-check-frequency
     set color blue
+    set income 5000
+    set MPC 0.75
+    set savings 0
   ]
 
   set-default-shape turtles "circle"
@@ -52,12 +61,15 @@ to setup-nodes
     ;; ### become-susceptible
     set virus-check-timer random virus-check-frequency
     set color green
+    set income 10000
+    set MPC 0.65
+    set savings 0
   ]
 end
 
 
 to setup-spatially-clustered-network
-  let num-links (average-node-degree * number-of-nodes) / 2
+  let num-links (average-node-degree * number-of-nodes) / (stricktness-of-lockdown + 1)
   while [count links < num-links ]
   [
     ask one-of turtles
